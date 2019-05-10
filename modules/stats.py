@@ -1,9 +1,25 @@
 import base64
 
-#Data Vars
-cpu = 3
-ram = 4
-disk = 5
+#Bool Vars
+cpuBool  = True
+ramBool  = False
+diskBool = False
+
+#ID Vars
+cpu  = 1
+ram  = 2
+disk = 3
+
+def GetState(type):
+    if(type == "cpu"):
+        if(cpuBool):  return "T"
+        else:         return "F"
+    if(type == "ram"):
+        if(ramBool):  return "T"
+        else:         return "F"
+    if(type == "disk"):
+        if(diskBool): return "T"
+        else:         return "F"
 
 class Encryption():
     def encode(self, string):

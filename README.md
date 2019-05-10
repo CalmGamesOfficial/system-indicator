@@ -1,1 +1,1 @@
-# system-indicator
+# System Indicator
