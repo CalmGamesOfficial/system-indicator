@@ -24,8 +24,9 @@ menu = menu()
 class Indicator():
     #Main#
     def __init__(self):
-        io.save("test")
         #Indicator
+        io.save("testing")
+        print(io.load(1))
         self.indicator = appIndicator.Indicator.new(APPINDICATOR_ID, 'whatever', appIndicator.IndicatorCategory.SYSTEM_SERVICES)
         self.indicator.set_status(appIndicator.IndicatorStatus.ACTIVE)
         self.indicator.set_menu(menu.menu())
