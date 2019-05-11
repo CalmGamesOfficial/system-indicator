@@ -1,16 +1,16 @@
 import modules.stats as stats
-from stats import Encryption
+from modules.stats import Encryption
 crypt = Encryption()
 
 def save():
-    with open('data.crypt', 'wb') as file:
+    with open ('data.crypt', 'wb') as file:
         code = crypt.encode(  "CPU:  " + stats.GetState("cpu") +
                             "\nRAM:  " + stats.GetState("ram") +
                             "\nDISK: " + stats.GetState("disk") + "\n")
         file.write(code)
 
 def load(typeOfObject):
-    with open('data.crypt', 'rt') as file:
+    with open ('data.crypt', 'rt') as file:
         code = str(file.read())
         decoded = crypt.decode(code)
         #Set the type of object
@@ -22,6 +22,7 @@ def load(typeOfObject):
             deleteOther = decoded[16:]
         #create the output
         string = deleteOther.strip("None\n")
-        if("T" in string): result = True
+        if ("T" in string): result = True
         else:              result = False
+
         return result
