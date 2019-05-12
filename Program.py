@@ -15,7 +15,8 @@ from threading import Thread
 #app modules# io, stats, userPreferences, optionsMenu
 #import modules.io as io
 #import modules.stats as stats
-import modules.userPreferences as config
+#import modules.webServer as server
+import modules.user_preferences as config
 from modules.menu import optionsMenu as menu
 #Gobal Vars#
 APPINDICATOR_ID = "SystemViewer"
@@ -26,7 +27,7 @@ class Indicator():
     #Main#
     def __init__(self):
         #Indicator
-        config.create()
+        config.run()
         self.indicator = appIndicator.Indicator.new(APPINDICATOR_ID, 'whatever', appIndicator.IndicatorCategory.SYSTEM_SERVICES)
         self.indicator.set_status(appIndicator.IndicatorStatus.ACTIVE)
         self.indicator.set_menu(menu.menu())
