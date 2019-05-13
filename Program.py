@@ -13,8 +13,8 @@ import psutil
 from threading import Thread
 
 #app modules# io, stats, userPreferences, optionsMenu
-#import modules.io as io
-#import modules.stats as stats
+import modules.io as io
+import modules.stats as stats
 #import modules.webServer as server
 import modules.user_preferences as config
 from modules.menu import optionsMenu as menu

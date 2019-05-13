@@ -12,13 +12,13 @@ disk = 3
 
 def GetState(type):
     if(type == "cpu"):
-        if(cpuBool):  return "T"
+        if(cpuBool == True):  return "T"
         else:         return "F"
     if(type == "ram"):
-        if(ramBool):  return "T"
+        if(ramBool == True):  return "T"
         else:         return "F"
     if(type == "disk"):
-        if(diskBool): return "T"
+        if(diskBool == True): return "T"
         else:         return "F"
 
 class Encryption():
