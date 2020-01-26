@@ -11,7 +11,7 @@ from modules import io as io
 
 cpuswitch = gtk.Switch()
 ramswitch = gtk.Switch()
-diskswitch = gtk.Switch()
+ttuSpinButton = gtk.SpinButton()
 
 def run():
     window = ConfigWindow()
@@ -65,17 +65,18 @@ class ConfigWindow(gtk.Window):
         self.connect("destroy", gtk.main_quit)
         self.set_icon_from_file("resources/imgs/favicon.png")
         self.set_title("User Preferences")
-        self.set_default_size(256, 384)
+        self.set_resizable(False)
+        self.set_default_size(256, 128)
         self.set_border_width(10)
 
         print("\033[34mloading...\033[0m")
         print(io.load(stats.cpu))
         print(io.load(stats.ram))
-        print(io.load(stats.disk))
+        print(io.load(stats.ttu))
 
         cpuswitch.set_active(io.load(stats.cpu))
         ramswitch.set_active(io.load(stats.ram))
-        diskswitch.set_active(io.load(stats.disk))
+        ttuSpinButton.set_value(float(io.load(stats.ttu)))
 
     def saveBottomButtons(self):
         hbox = gtk.HBox(True, 5)
@@ -91,15 +92,15 @@ class ConfigWindow(gtk.Window):
         return hbox
 
     def onSaveChanges(self, button):
-        stats.cpuBool = cpuswitch.get_active()
-        stats.ramBool = ramswitch.get_active()
-        stats.diskBool = diskswitch.get_active()
+        stats.cpuBool  = cpuswitch.get_active()
+        stats.ramBool  = ramswitch.get_active()
+        stats.ttuValue = ttuSpinButton.get_value()
         print("Saving..")
         io.save(self)
         print("\033[32m Saved \033[0m")
         print("CPU : " + str(stats.cpuBool))
         print("RAM : " + str(stats.ramBool))
-        print("DISK: " + str(stats.diskBool))
+        print("TTU : " + str(stats.ttuValue))
 
     def onSwitchCpu(self, switch, bool):
         if(switch.get_active() == True):
@@ -115,12 +116,9 @@ class ConfigWindow(gtk.Window):
             stats.ramBool = True
         ramswitch.set_active(switch.get_active())
 
-    def onSwitchDisk(self, switch, bool):
-        if(switch.get_active() == True):
-            stats.diskBool = False
-        else:
-            stats.diskBool = True
-        diskswitch.set_active(switch.get_active())
+    def onSwitchTtu (self, SpinButton):
+        stats.ttuValue = SpinButton.get_value()
+        print(stats.ttuValue)
 
     def __init__(self):
         super(ConfigWindow, self).__init__()
@@ -128,7 +126,6 @@ class ConfigWindow(gtk.Window):
 
     def init_ui(self):
         self.create()
-
         #mainBox
         mainBox = gtk.Box()
 
@@ -138,7 +135,7 @@ class ConfigWindow(gtk.Window):
 
         """TITLES"""
         title = label(self,"<b>User Preferences</b>", 20)
-        subtitle = label(self,"<b>Show in top bar:</b>", 13)
+        subtitle = label(self,"Show in top bar:", 13)
 
         """CPU SWITCH"""
         cpuBox = gtk.HBox(spacing = 3)
@@ -158,23 +155,28 @@ class ConfigWindow(gtk.Window):
         ramBox.pack_start(ramLabel, True, False, 0)
         ramBox.pack_start(ramSwitch, True, False, 0)
 
-        """DISK SWITCH"""
-        diskBox = gtk.HBox(spacing = 3)
-        diskLabel = label(self, "DISK", 15)
-        diskSwitch = gtk.Switch()
-        diskSwitch.set_active(io.load(stats.disk))
-        diskSwitch.connect("notify::active", self.onSwitchDisk)
-        diskBox.pack_start(diskLabel, True, False, 0)
-        diskBox.pack_start(diskSwitch, True, False, 0)
+        """TTU SPIN BUTTON"""
+        ttuBox = gtk.HBox(spacing = 3)
+        ttuLabel = label(self, "Time to Update", 10)
+        ttuSpinButton = gtk.SpinButton()
+
+        ttuSpinButton.set_digits(2)
+        ttuSpinButton.set_range(0, 5)
+        ttuSpinButton.set_increments(0.25, 0.25)
+        ttuSpinButton.set_value(float(io.load(stats.ttu)))
+
+        ttuSpinButton.connect("value-changed", self.onSwitchTtu)
+        ttuBox.pack_start(ttuLabel, True, False, 0)
+        ttuBox.pack_start(ttuSpinButton, True, False, 0)
 
 
         bottomButtons = self.saveBottomButtons()
 
-        vbox.add(title)
-        vbox.add(subtitle)
+        #vbox.add(title)
+        #vbox.add(subtitle)
         vbox.add(cpuBox)
         vbox.add(ramBox)
-        vbox.add(diskBox)
+        vbox.add(ttuBox)
 
         align = gtk.Alignment(xalign = 1.0, yalign = 1.0, xscale = 0, yscale = 0.3)
         align.add(bottomButtons)

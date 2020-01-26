@@ -6,7 +6,7 @@ def save(button):
     with open('data.crypt', 'wb') as file:
         code = crypt.encode(  "CPU:  " + stats.GetState("cpu") +
                             "\nRAM:  " + stats.GetState("ram") +
-                            "\nDISK: " + stats.GetState("disk") + "\n")
+                            "\nTTU:  " + str(stats.GetState("ttu")) + "\n")
         file.write(code)
 
 def load(typeOfObject):
@@ -18,11 +18,15 @@ def load(typeOfObject):
             deleteOther = decoded[:-16]
         if(typeOfObject == 2):  #RAM
             deleteOther = decoded[8:-8]
-        if(typeOfObject == 3):  #DISK
+        if(typeOfObject == 3):  #TTU
             deleteOther = decoded[16:]
 
         #create the output
-        string = deleteOther.strip("None\n")
-        if("T" in string): result = True
-        else:              result = False
+        if(typeOfObject != 3):
+            string = deleteOther.strip("None\n")
+            if("T" in string): result = True
+            else:              result = False
+        else:
+            string = deleteOther.strip("None\n")
+            result = string[6:]
         return result
